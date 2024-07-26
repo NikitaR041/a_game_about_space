@@ -1,0 +1,55 @@
+# Игнорировать все файлы .exe, .dll и .lib
+*.exe
+*.dll
+*.lib
+
+# Игнорировать все файлы .log
+*.log
+
+# Игнорировать все файлы в каталоге Debug/
+Debug/
+
+# Игнорировать все файлы в каталоге Release/ и temp/
+Release/
+temp/
+
+# Игнорировать все файлы .suo и .user
+*.suo
+*.user
+
+# Игнорировать все файлы в каталоге .vs/
+.vs/
+
+# Игнорировать все файлы .ncb, .sdf и .suo
+*.ncb
+*.sdf
+*.suo
+
+# Игнорировать все файлы .bak и .swp
+*.bak
+*.swp
+
+# Игнорировать все файлы .vcxproj, .vcxproj.filters и .pdb
+*.vcxproj
+*.vcxproj.filters
+*.pdb
+
+# Игнорировать все файлы .idb, .ilk и .pch
+*.idb
+*.ilk
+*.pch
+
+# Игнорировать все файлы .ipch
+*.ipch
+
+# Игнорировать все файлы .aps
+*.aps
+
+# Игнорировать все файлы .db и .jfm
+*.db
+*.jfm
+
+# Игнорировать все файлы .api и .orig и Makefile
+*.api
+*.orig
+*Makefile
