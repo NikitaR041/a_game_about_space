@@ -5,6 +5,7 @@
 const int WIDHT = 1200;
 const int HEIGHT = 800;
 
+//Класс, который представляет в себе объекты звезд и планет
 class ObjectatMenu {
 public:
     //Координаты объекта, размеры (ширина и высота), скорость
@@ -31,8 +32,6 @@ public:
 
         // Устанавливаем центр спрайта в центр изображения
         sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
-
-        
     }
 
     void MovePlanet(sf::RenderWindow& window, float time) {
@@ -43,11 +42,11 @@ public:
         sprite.rotate(0.05);
 
         //Проверяем, что если объект улетает за край карты по Ох
-        if (wx <= 100 || wx + 100 >= WIDHT) {
+        if (wx <= 50 || wx + 50 >= WIDHT) {
             speed.x = -speed.x;
         }
         //Проверяем, что если объект улетает за край карты по Оy
-        if (wy <= 100 || wy + 100 >= HEIGHT) {
+        if (wy <= 50 || wy + 50 >= HEIGHT) {
             speed.y = -speed.y;
         }
 
@@ -55,21 +54,58 @@ public:
     }
 };
 
+//Функции по отображению заднего фона - ленточный конвейер
+void DrawBackground(const std::string& File, sf::Texture& texture, sf::Sprite& sprite1, sf::Sprite& sprite2) {
+    //Загружем изображение в текстуру через условие
+    if (!texture.loadFromFile(File)) {
+        std::cout << "Mistake. The background is not loaded!" << '\n';
+        return;
+    }
+    //Объявляем спрайты и загружаем текстуры
+    sprite1.setTexture(texture);
+    sprite2.setTexture(texture);
+    
+    //Задаем позицию
+    sprite1.setPosition(0, 0);
+    sprite2.setPosition(WIDHT, 0);
+
+    //Масштабируем спрайты для заполнения его окна
+    sprite1.setScale(WIDHT / sprite1.getGlobalBounds().width, HEIGHT / sprite1.getGlobalBounds().height);
+    sprite2.setScale(WIDHT / sprite2.getGlobalBounds().width, HEIGHT / sprite2.getGlobalBounds().height);
+}
+void UpdateDrawBackground(sf::Sprite& sprite1, sf::Sprite& sprite2, float time) {
+    const float backgroundSpeed = -0.05;
+
+    sprite1.move(backgroundSpeed * time, 0);
+    sprite2.move(backgroundSpeed * time, 0);
+
+    if (sprite1.getPosition().x + sprite1.getGlobalBounds().width < 0) {
+        sprite1.setPosition(sprite2.getPosition().x + sprite2.getGlobalBounds().width, 0);
+    }
+
+    if (sprite2.getPosition().x + sprite2.getGlobalBounds().width < 0) {
+        sprite2.setPosition(sprite1.getPosition().x + sprite1.getGlobalBounds().width, 0);
+    }
+}
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(WIDHT, HEIGHT), "My window");
 
+    sf::Texture texturebackground;
+    sf::Sprite sprite1, sprite2;
+    DrawBackground("image/MilkiWay.png", texturebackground, sprite1, sprite2);
 
     //Создание переменных - планет
-    ObjectatMenu planet1(120, 120, 200, 200, 0.1, 0.1, "planet1.png");
-    ObjectatMenu planet2(300, 300, 200, 200, 0.4, 0.2, "planet2.png");
-    ObjectatMenu planet3(600, 600, 220, 200, 0.3, 0.2, "planet3.png");
+    ObjectatMenu planet1(120, 120, 100, 100, 0.1, 0.1, "planet1.png");
+    ObjectatMenu planet2(300, 300, 100, 100, 0.4, 0.2, "planet2.png");
+    ObjectatMenu planet3(600, 600, 120, 100, 0.3, 0.2, "planet3.png");
 
     //Создание переменных - звезд
-    ObjectatMenu star1(120, 120, 200, 200, 0.2, 0.2, "star1.png");
-    ObjectatMenu star2(300, 300, 200, 200, 0.2, 0.2, "star2.png");
-    ObjectatMenu star3(600, 600, 220, 200, 0.2, 0.2, "star3.png");
-    
+    ObjectatMenu star1(120, 120, 50, 50, 0.2, 0.2, "star1.png");
+    ObjectatMenu star2(300, 300, 50, 50, 0.2, 0.2, "star2.png");
+    ObjectatMenu star3(600, 600, 52, 50, 0.2, 0.2, "star3.png");
+
     sf::Clock clock; //Объект класса Clock для обеспечения плавности игры (передвижения разных объектов)
 
     while (window.isOpen())
@@ -85,7 +121,11 @@ int main()
                 window.close();
         }
 
-        window.clear(sf::Color::Black);
+        window.clear();
+
+        UpdateDrawBackground(sprite1, sprite2, time);
+        window.draw(sprite1);
+        window.draw(sprite2);
 
         //Объявление объектов
         planet1.MovePlanet(window, time);

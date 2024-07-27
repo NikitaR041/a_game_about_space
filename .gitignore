@@ -8,6 +8,11 @@
 
 # Игнорировать все файлы в каталоге Debug/
 Debug/
+bin/
+doc/
+examples/
+include/
+lib/
 
 # Игнорировать все файлы в каталоге Release/ и temp/
 Release/
