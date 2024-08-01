@@ -57,7 +57,7 @@ public:
 
 //Функции по отображению заднего фона - ленточный конвейер
 void DrawBackground(const std::string& File, sf::Texture& texture, sf::Sprite& sprite1, sf::Sprite& sprite2) {
-    //Загружем изображение в текстуру через условие
+    //Загружаем изображение в текстуру через условие
     if (!texture.loadFromFile(File)) {
         std::cout << "Mistake. The background is not loaded!" << '\n';
         return;
@@ -89,13 +89,53 @@ void UpdateDrawBackground(sf::Sprite& sprite1, sf::Sprite& sprite2, float time) 
     }
 }
 
+//Функции по отображению кнопок и взаимодействия с ними
+void DrawButton(const std::string& File, sf::Texture& texture, sf::Sprite& sprite, int x, int y) {;
+    //Загружаем изображение в текстуру через условие
+    if (!texture.loadFromFile(File)) {
+        std::cout << "Mistake. The background is not loaded!" << '\n';
+        return;
+    }
+    //Объявляем спрайты и загружаем текстуры
+    sprite.setTexture(texture);
+
+    //Задаем позицию
+    sprite.setPosition(x, y);
+ }
+
+//Взаимодействие с конпками
+void ButtonCliclProcessing(sf::RenderWindow& window, sf::Sprite& sprite, int x, int y) {
+    //Возращаем белый цвет оригинальной картинке
+    sprite.setColor(sf::Color::White);
+    
+    //Если пользователь наводится курсором мыши на определенную часть кнопки, то срабатывет смена цвета в золотистый цвет
+    if (sf::IntRect(530, 370, 140, 60).contains(sf::Mouse::getPosition(window))) {
+        sprite.setColor(sf::Color(255, 199, 7));
+    }
+    if (sf::IntRect(530, 450, 140, 60).contains(sf::Mouse::getPosition(window))) {
+        sprite.setColor(sf::Color(255, 199, 7));
+    }
+    if (sf::IntRect(530, 530, 140, 60).contains(sf::Mouse::getPosition(window))) {
+        sprite.setColor(sf::Color(255, 199, 7));
+    }
+}
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(WIDHT, HEIGHT), "My window");
 
+    //Создание заднего фона
     sf::Texture texturebackground;
     sf::Sprite sprite1, sprite2;
     DrawBackground("image/MilkiWay.png", texturebackground, sprite1, sprite2);
+
+    //Создание надписей для кнопок
+    sf::Texture textureStart, textureLevel, textureAuthor;
+    sf::Sprite spriteStart, spriteLevel, spriteAuthor;
+    DrawButton("image/game.png", textureStart, spriteStart, 530, 370);
+    DrawButton("image/level.png", textureLevel, spriteLevel, 530, 450);
+    DrawButton("image/Author.png", textureAuthor, spriteAuthor, 530, 530);
+
 
     //Создание переменных - планет
     ObjectatMenu planet1(120, 120, 100, 100, 0.1, 0.1, "planet1.png");
@@ -148,9 +188,24 @@ int main()
         window.draw(star3.sprite);
         //Объявление объектов
 
+        //Объвление название кнопок
+        ButtonCliclProcessing(window, spriteStart, 530, 370);
+        window.draw(spriteStart);
+
+        ButtonCliclProcessing(window, spriteLevel, 530, 450);
+        window.draw(spriteLevel);
+        
+        ButtonCliclProcessing(window, spriteAuthor, 530, 530);
+        window.draw(spriteAuthor);
+
+        //Объвление название кнопок
+
         window.display();
     }
 
     return 0;
 }
 
+/*
+    Может быть позже отделить загрузки различных объектов в отдельную функцию, а позже все различные функции положить в отдельный файл и загружать их здесь
+*/
