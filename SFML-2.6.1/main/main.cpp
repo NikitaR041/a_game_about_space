@@ -5,6 +5,9 @@
 const int WIDHT = 1200;
 const int HEIGHT = 800;
 
+int isClickAgainTwo = 0; //isClickAgainTwo определяет нажата ли одна и та же кнопка два раза
+int isClickAuthor = 0; //isClickAuthor определяет этап переключения
+
 //Класс, который представляет в себе объекты звезд и планет
 class ObjectatMenu {
 public:
@@ -89,6 +92,22 @@ void UpdateDrawBackground(sf::Sprite& sprite1, sf::Sprite& sprite2, float time) 
     }
 }
 
+//Функция по отображению автора игры и загрузка уровней
+/*
+void DrawMenu2(const std::string& File, sf::Texture& texture, sf::Sprite& sprite, int& isClickLevel, int& isClickAuthor, int x, int y) {
+    //Загружаем изображение в текстуру через условие
+    if (!texture.loadFromFile(File)) {
+        std::cout << "Mistake. The background is not loaded!" << '\n';
+        return;
+    }
+    //Объявляем спрайты и загружаем текстуры
+    sprite.setTexture(texture);
+
+    
+    //Задаем позицию
+    sprite.setPosition(x, y);
+}*/
+
 //Функции по отображению кнопок и взаимодействия с ними
 void DrawButton(const std::string& File, sf::Texture& texture, sf::Sprite& sprite, int x, int y) {;
     //Загружаем изображение в текстуру через условие
@@ -104,7 +123,13 @@ void DrawButton(const std::string& File, sf::Texture& texture, sf::Sprite& sprit
  }
 
 //Взаимодействие с конпками
-void ButtonCliclProcessing(sf::RenderWindow& window, sf::Sprite& spriteStart, sf::Sprite& spriteLevel, sf::Sprite& spriteAuthor, int x, int y) {
+void ButtonCliclProcessing(sf::RenderWindow& window, sf::Sprite& spriteStart, sf::Sprite& spriteLevel, sf::Sprite& spriteAuthor, sf::Sprite& spriteAboutAuthor, int x, int y) {
+    static bool wasMousePressed = false; // Сохраняет состояние кнопки мыши в прошлом кадре
+    
+    int isClick = 0;//isClick определяет какая кнопка будет нажата в меню игры
+    
+    int isClickLevel = 0; //isClickLevel определяет этап переключения
+
     //Возращаем белый цвет оригинальной картинке
     spriteStart.setColor(sf::Color::White);
     spriteLevel.setColor(sf::Color::White);
@@ -113,12 +138,40 @@ void ButtonCliclProcessing(sf::RenderWindow& window, sf::Sprite& spriteStart, sf
     //Если пользователь наводится курсором мыши на определенную часть кнопки, то срабатывет смена цвета в золотистый цвет
     if (sf::IntRect(530, 370, 140, 60).contains(sf::Mouse::getPosition(window))) {
         spriteStart.setColor(sf::Color(255, 199, 7));
+        isClick = 1;
     }
-    if (sf::IntRect(530, 450, 140, 60).contains(sf::Mouse::getPosition(window))) {
+    else if (sf::IntRect(530, 450, 140, 60).contains(sf::Mouse::getPosition(window))) {
         spriteLevel.setColor(sf::Color(255, 199, 7));
+        isClick = 2;
     }
-    if (sf::IntRect(530, 530, 140, 60).contains(sf::Mouse::getPosition(window))) {
+    else if (sf::IntRect(530, 530, 140, 60).contains(sf::Mouse::getPosition(window))) {
         spriteAuthor.setColor(sf::Color(255, 199, 7));
+        isClick = 3;
+    }
+    else {
+        isClick = 0;
+    }
+    
+    //Обработка нажатия на кнопку 
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        if (wasMousePressed == 0) {
+            if (isClick == 1) {
+                std::cout << "Game!" << '\n';
+                isClickAuthor = 0;
+            }
+            if (isClick == 2) {
+                std::cout << "Level!" << '\n';
+                isClickAuthor = 0;
+            }
+            if (isClick == 3) {
+                isClickAgainTwo = (isClickAgainTwo == 0) ? 1 : 0;
+                isClickAuthor = isClickAgainTwo;
+            }
+        }
+        wasMousePressed = true; //Устанавливаем флаг на нажатие
+    }
+    else {
+        wasMousePressed = false; //Сбрасываем флаг, когда кнопка не нажата
     }
 }
 
@@ -132,12 +185,12 @@ int main()
     DrawBackground("image/MilkiWay.png", texturebackground, sprite1, sprite2);
 
     //Создание надписей для кнопок
-    sf::Texture textureStart, textureLevel, textureAuthor;
-    sf::Sprite spriteStart, spriteLevel, spriteAuthor;
+    sf::Texture textureStart, textureLevel, textureAuthor, textureAboutAuthor;
+    sf::Sprite spriteStart, spriteLevel, spriteAuthor, spriteAboutAuthor;
     DrawButton("image/game.png", textureStart, spriteStart, 530, 370);
     DrawButton("image/level.png", textureLevel, spriteLevel, 530, 450);
     DrawButton("image/Author.png", textureAuthor, spriteAuthor, 530, 530);
-
+    DrawButton("Image/AboutAuthor.png", textureAboutAuthor, spriteAboutAuthor, 10, 370);
 
     //Создание переменных - планет
     ObjectatMenu planet1(120, 120, 100, 100, 0.1, 0.1, "planet1.png");
@@ -166,6 +219,7 @@ int main()
 
         window.clear();
 
+        //Отображение заднего фона - ленточный конвейер
         UpdateDrawBackground(sprite1, sprite2, time);
         window.draw(sprite1);
         window.draw(sprite2);
@@ -190,15 +244,15 @@ int main()
         window.draw(star3.sprite);
         //Объявление объектов
 
-        //Объвление название кнопок
-        ButtonCliclProcessing(window, spriteStart, spriteLevel, spriteAuthor, sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+        //Объявление название кнопок
+        ButtonCliclProcessing(window, spriteStart, spriteLevel, spriteAuthor, spriteAboutAuthor, sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
         window.draw(spriteStart);
-
-        //ButtonCliclProcessing(window, spriteLevel, 530, 450);
         window.draw(spriteLevel);
-        
-        //ButtonCliclProcessing(window, spriteAuthor, 530, 530);
         window.draw(spriteAuthor);
+        //Вывод автора или очистка
+        if (isClickAuthor == 1) {
+            window.draw(spriteAboutAuthor);
+        }
         //Объвление название кнопок
 
         window.display();
