@@ -104,19 +104,21 @@ void DrawButton(const std::string& File, sf::Texture& texture, sf::Sprite& sprit
  }
 
 //Взаимодействие с конпками
-void ButtonCliclProcessing(sf::RenderWindow& window, sf::Sprite& sprite, int x, int y) {
+void ButtonCliclProcessing(sf::RenderWindow& window, sf::Sprite& spriteStart, sf::Sprite& spriteLevel, sf::Sprite& spriteAuthor, int x, int y) {
     //Возращаем белый цвет оригинальной картинке
-    sprite.setColor(sf::Color::White);
-    
+    spriteStart.setColor(sf::Color::White);
+    spriteLevel.setColor(sf::Color::White);
+    spriteAuthor.setColor(sf::Color::White);
+
     //Если пользователь наводится курсором мыши на определенную часть кнопки, то срабатывет смена цвета в золотистый цвет
     if (sf::IntRect(530, 370, 140, 60).contains(sf::Mouse::getPosition(window))) {
-        sprite.setColor(sf::Color(255, 199, 7));
+        spriteStart.setColor(sf::Color(255, 199, 7));
     }
     if (sf::IntRect(530, 450, 140, 60).contains(sf::Mouse::getPosition(window))) {
-        sprite.setColor(sf::Color(255, 199, 7));
+        spriteLevel.setColor(sf::Color(255, 199, 7));
     }
     if (sf::IntRect(530, 530, 140, 60).contains(sf::Mouse::getPosition(window))) {
-        sprite.setColor(sf::Color(255, 199, 7));
+        spriteAuthor.setColor(sf::Color(255, 199, 7));
     }
 }
 
@@ -189,15 +191,14 @@ int main()
         //Объявление объектов
 
         //Объвление название кнопок
-        ButtonCliclProcessing(window, spriteStart, 530, 370);
+        ButtonCliclProcessing(window, spriteStart, spriteLevel, spriteAuthor, sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
         window.draw(spriteStart);
 
-        ButtonCliclProcessing(window, spriteLevel, 530, 450);
+        //ButtonCliclProcessing(window, spriteLevel, 530, 450);
         window.draw(spriteLevel);
         
-        ButtonCliclProcessing(window, spriteAuthor, 530, 530);
+        //ButtonCliclProcessing(window, spriteAuthor, 530, 530);
         window.draw(spriteAuthor);
-
         //Объвление название кнопок
 
         window.display();
