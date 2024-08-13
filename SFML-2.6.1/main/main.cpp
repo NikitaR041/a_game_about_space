@@ -69,43 +69,139 @@ private:
     sf::Image image;
     sf::Texture texture;
     sf::Sprite sprite;
-    sf::Color color; //смена цвета
+    //sf::Color objcolor; //смена цвета
     sf::Vector2u initialPosition; //Изначальное задание координат
 
 public:
     //Объявляем конструктор
-    Button(int x, int y, int widht, int height, const std::string& file, sf::Color hoverColor = sf::Color(255, 199, 7)) : initialPosition(x, y), widht(widht), height(height), color(color) {
+    Button(int x, int y, int widht, int height, const std::string& file) : initialPosition(x, y), widht(widht), height(height) {
+        dx = initialPosition.x;
+        dy = initialPosition.y;
+
         if (!image.loadFromFile("image/" + file)) {
             std::cout << "Error: Failed to load image from file" << '\n';
         }
         texture.loadFromImage(image);
         sprite.setTexture(texture);
 
-        // Устанавливаем центр спрайта в центр изображения
-        sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
-
         //Поумолчанию будут заданы кнопки по середине в зависимости от заданного окна в константе
-        updatePosition(sf::Vector2u(WIDHT,HEIGHT));
+        sprite.setPosition(dx, dy);
+        // Устанавливаем центр спрайта в центр изображения
+        //sprite.setOrigin(sprite.getGlobalBounds().width / 2.0f, sprite.getGlobalBounds().height / 2.0f);
     }   
 
-    //Функция по установлению и обновлению расположение спрайта
+    
+    //Функция по обновлению расположение спрайта
     void updatePosition(const sf::Vector2u windowSize) {
-        if (WIDHT != windowSize.x || HEIGHT != windowSize.y) {
-            int newX, newY;
-            newX = windowSize.x / 2;
-            newY = windowSize.y / 2;
-            sprite.setPosition(newX, newY);
+        //float error_rate_x error_rate_y;
+        if (WIDHT == windowSize.x && HEIGHT == windowSize.y) {
+            std::cout << "1" << '\n';
+            //error_rate_x = initialPosition.x;
+            //error_rate_y = initialPosition.y;
+            dx = (initialPosition.x);
+            dy = (initialPosition.y);
+            sprite.setPosition(dx, dy);
+        }
+        else if (WIDHT != windowSize.x && HEIGHT == windowSize.y) {
+            std::cout << "2" << '\n';
+            //float newX;
+            dx = (windowSize.x / 2.0f) - (widht / 2.0f);
+            //sprite.setPosition(dx, dy);
+        }
+        else if (WIDHT == windowSize.x && HEIGHT != windowSize.y) {
+            std::cout << "3" << '\n';
+            //float newY;
+            dy = (windowSize.y / 2.0f) - (height / 2.0f);
+            //sprite.setPosition(dx, dy);
         }
         else {
-            //По умолчанию задаем как хотим
-            sprite.setPosition(initialPosition.x, initialPosition.y);
+            std::cout << "4" << '\n';
+            //float newX, newY;
+            dx = (windowSize.x / 2.0f) - (widht / 2.0f);
+            dy = (windowSize.y / 2.0f) - (height / 2.0f);
+            //sprite.setPosition(dx,dy);
         }
+        // dx and dx it is initialPosition.x and initialPosition.y
+        /*
+        if (WIDHT != windowSize.x || HEIGHT != windowSize.y) {
+
+            dx = (windowSize.x / 2.0f) - (widht / 2.0f);
+            dy = (windowSize.y / 2.0f) - (height / 2.0f);
+            //sprite.setPosition(dx, dy);
+        }
+        if (WIDHT != windowSize.x || HEIGHT != windowSize.y) {
+            float scaleX = static_cast<float>(widht) / texture.getSize().x;
+            float scaleY = static_cast<float>(height) / texture.getSize().y;
+            sprite.setScale(scaleX, scaleY);
+            
+            // Центрируем спрайт в окне
+            float newX = (windowSize.x / 4.0f);
+            float newY = (windowSize.y / 4.0f);
+            sprite.setPosition(newX, newY);
+        }*/
+
+        // Рассчитываем масштаб по ширине и высоте
+        /*
+        float scaleX = static_cast<float>(widht) / texture.getSize().x;
+        float scaleY = static_cast<float>(height) / texture.getSize().y;
+        sprite.setScale(scaleX, scaleY);
+
+        // Центрируем спрайт в окне
+        float newX = (windowSize.x / 2.0f) - (widht / 2.0f);
+        float newY = (windowSize.y / 2.0f) - (height / 2.0f);
+        sprite.setPosition(newX, newY);
+        */
+        //float newX, newY;
+        //newX = windowSize.x / 2.0f;
+        //newY = windowSize.y / 2.0f;
+        //sprite.setPosition(newX, newY);
+        /*
+        if (WIDHT == windowSize.x && HEIGHT == windowSize.y) {
+            std::cout << "1" << '\n';
+            sprite.setPosition(1.0f * initialPosition.x, 1.0f * initialPosition.y);
+        }
+        else if(WIDHT != windowSize.x && HEIGHT == windowSize.y){
+            std::cout << "2" << '\n';
+            float newX;
+            newX = windowSize.x / 2.0f;
+            sprite.setPosition(newX, 1.0f * initialPosition.y);
+        }
+        else if (WIDHT == windowSize.x && HEIGHT != windowSize.y) {
+            std::cout << "3" << '\n';
+            float newY;
+            newY = windowSize.y / 2.0f;
+            sprite.setPosition(1.0f * initialPosition.x, newY);
+        }
+        else {
+            std::cout << "4" << '\n';
+            float newX, newY;
+            newX = windowSize.x / 2.0f;
+            newY = windowSize.y / 2.0f;
+            sprite.setPosition(newX, newY);
+        }
+        */
+
+        /*
+        if (WIDHT != windowSize.x || HEIGHT != windowSize.y) {
+            std::cout << "2" << '\n';
+            //По умолчанию задаем как хотим
+            sprite.setPosition(1.0f * initialPosition.x, 1.0f * initialPosition.y);
+
+        }
+        else {        
+            std::cout << "1" << '\n';
+            //float newX, newY;
+            newX = windowSize.x / 2.0f;
+            newY = windowSize.y / 2.0f;
+            sprite.setPosition(newX, newY);
+
+        }*/
     }
 
     //Функция по изменению цвета кнопки
     void updateColorButton(sf::RenderWindow& window) {
-        if (sf::IntRect(initialPosition.x, initialPosition.y, widht, height).contains(sf::Mouse::getPosition(window))) {
-            sprite.setColor(color);
+        if (sf::IntRect(dx, dy, widht, height).contains(sf::Mouse::getPosition(window))) {
+            sprite.setColor(sf::Color(255,199, 7));
         }
         else {
             sprite.setColor(sf::Color::White);
@@ -118,7 +214,7 @@ public:
 
     //Проверка на нажатие кнопки
     bool isClicked(sf::RenderWindow& window) {
-        return sf::IntRect(initialPosition.x, initialPosition.y, widht, height).contains(sf::Mouse::getPosition(window)) && sf::Mouse::isButtonPressed(sf::Mouse::Left);
+        return sf::IntRect(dx, dy, widht, height).contains(sf::Mouse::getPosition(window)) && sf::Mouse::isButtonPressed(sf::Mouse::Left);
     }
 };
 
