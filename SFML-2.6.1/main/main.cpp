@@ -86,116 +86,32 @@ public:
 
         //Поумолчанию будут заданы кнопки по середине в зависимости от заданного окна в константе
         sprite.setPosition(dx, dy);
-        // Устанавливаем центр спрайта в центр изображения
-        //sprite.setOrigin(sprite.getGlobalBounds().width / 2.0f, sprite.getGlobalBounds().height / 2.0f);
     }   
 
     
     //Функция по обновлению расположение спрайта
     void updatePosition(const sf::Vector2u windowSize) {
-        //float error_rate_x error_rate_y;
         if (WIDHT == windowSize.x && HEIGHT == windowSize.y) {
             std::cout << "1" << '\n';
-            //error_rate_x = initialPosition.x;
-            //error_rate_y = initialPosition.y;
             dx = (initialPosition.x);
             dy = (initialPosition.y);
             sprite.setPosition(dx, dy);
         }
         else if (WIDHT != windowSize.x && HEIGHT == windowSize.y) {
             std::cout << "2" << '\n';
-            //float newX;
             dx = (windowSize.x / 2.0f) - (widht / 2.0f);
-            //sprite.setPosition(dx, dy);
+            dy = (initialPosition.y);
         }
         else if (WIDHT == windowSize.x && HEIGHT != windowSize.y) {
             std::cout << "3" << '\n';
-            //float newY;
             dy = (windowSize.y / 2.0f) - (height / 2.0f);
-            //sprite.setPosition(dx, dy);
+            dx = (initialPosition.x);
         }
         else {
             std::cout << "4" << '\n';
-            //float newX, newY;
             dx = (windowSize.x / 2.0f) - (widht / 2.0f);
             dy = (windowSize.y / 2.0f) - (height / 2.0f);
-            //sprite.setPosition(dx,dy);
         }
-        // dx and dx it is initialPosition.x and initialPosition.y
-        /*
-        if (WIDHT != windowSize.x || HEIGHT != windowSize.y) {
-
-            dx = (windowSize.x / 2.0f) - (widht / 2.0f);
-            dy = (windowSize.y / 2.0f) - (height / 2.0f);
-            //sprite.setPosition(dx, dy);
-        }
-        if (WIDHT != windowSize.x || HEIGHT != windowSize.y) {
-            float scaleX = static_cast<float>(widht) / texture.getSize().x;
-            float scaleY = static_cast<float>(height) / texture.getSize().y;
-            sprite.setScale(scaleX, scaleY);
-            
-            // Центрируем спрайт в окне
-            float newX = (windowSize.x / 4.0f);
-            float newY = (windowSize.y / 4.0f);
-            sprite.setPosition(newX, newY);
-        }*/
-
-        // Рассчитываем масштаб по ширине и высоте
-        /*
-        float scaleX = static_cast<float>(widht) / texture.getSize().x;
-        float scaleY = static_cast<float>(height) / texture.getSize().y;
-        sprite.setScale(scaleX, scaleY);
-
-        // Центрируем спрайт в окне
-        float newX = (windowSize.x / 2.0f) - (widht / 2.0f);
-        float newY = (windowSize.y / 2.0f) - (height / 2.0f);
-        sprite.setPosition(newX, newY);
-        */
-        //float newX, newY;
-        //newX = windowSize.x / 2.0f;
-        //newY = windowSize.y / 2.0f;
-        //sprite.setPosition(newX, newY);
-        /*
-        if (WIDHT == windowSize.x && HEIGHT == windowSize.y) {
-            std::cout << "1" << '\n';
-            sprite.setPosition(1.0f * initialPosition.x, 1.0f * initialPosition.y);
-        }
-        else if(WIDHT != windowSize.x && HEIGHT == windowSize.y){
-            std::cout << "2" << '\n';
-            float newX;
-            newX = windowSize.x / 2.0f;
-            sprite.setPosition(newX, 1.0f * initialPosition.y);
-        }
-        else if (WIDHT == windowSize.x && HEIGHT != windowSize.y) {
-            std::cout << "3" << '\n';
-            float newY;
-            newY = windowSize.y / 2.0f;
-            sprite.setPosition(1.0f * initialPosition.x, newY);
-        }
-        else {
-            std::cout << "4" << '\n';
-            float newX, newY;
-            newX = windowSize.x / 2.0f;
-            newY = windowSize.y / 2.0f;
-            sprite.setPosition(newX, newY);
-        }
-        */
-
-        /*
-        if (WIDHT != windowSize.x || HEIGHT != windowSize.y) {
-            std::cout << "2" << '\n';
-            //По умолчанию задаем как хотим
-            sprite.setPosition(1.0f * initialPosition.x, 1.0f * initialPosition.y);
-
-        }
-        else {        
-            std::cout << "1" << '\n';
-            //float newX, newY;
-            newX = windowSize.x / 2.0f;
-            newY = windowSize.y / 2.0f;
-            sprite.setPosition(newX, newY);
-
-        }*/
     }
 
     //Функция по изменению цвета кнопки
@@ -220,9 +136,12 @@ public:
 
 //Функиця, которая связана с классом Button
 //Это функция по распределению собитий при нажатий на кнопку
-void distributionEvent(sf::RenderWindow& window, Button& button1) {
+void distributionEvent(sf::RenderWindow& window, Button& button1, Button& button2) {
     if (button1.isClicked(window)) {
         std::cout << "YRA!" << '\n';
+    }
+    else if (button2.isClicked(window)) {
+        std::cout << "YESSSSSSSSS!" << '\n';
     }
     //Далее распределять роли кнопок
 }
@@ -437,6 +356,8 @@ int main()
 
     //Создание надписей для кнопок
     Button button1(530, 370, 140, 60, "game.png");
+    Button button2(530, 450, 140, 60, "level.png");
+    //Button button3(530, 530, 140, 60, "Author.png");
     /*
     Button button1(530, 370, 140, 60, 0, "game.png");
     Button button2(530, 450, 140, 60, 0, "level.png");
@@ -482,6 +403,8 @@ int main()
                 sf::Vector2u new_size(event.size.width, event.size.height);
                 //Изменяем координаты спрайтов кнопок
                 button1.updatePosition(new_size);
+                button2.updatePosition(new_size);
+                //button3.updatePosition(new_size);
                 /*
                 button1.UpdateCoord(530, 370);
                 button2.UpdateCoord(530, 450);
@@ -520,10 +443,20 @@ int main()
             //Объявление объектов
         }
 
+        distributionEvent(window, button1, button2);
+
         //Обработка и риование кнопок
         button1.updateColorButton(window);
-        distributionEvent(window, button1);
+
         button1.drawButton(window);
+
+        button2.updateColorButton(window);
+
+        button2.drawButton(window);
+
+        //button3.updateColorButton(window);
+
+        //button3.drawButton(window);
         /*
         Проверка нужна для недоступности обработки нажатий этих кнопок, если
         пользователь открыл меню с уровнями.
